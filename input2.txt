@@ -1,1 +1,48 @@
 "I AM 2 DICSO"
+
+mkdir ansible
+cd ansible
+ansible-galaxy init prerequisites
+
+cd prerequisites
+nano tasks/main.yml
+
+Replace the contents with:
+
+---
+- name: Print prerequisites message
+  ansible.builtin.debug:
+    msg: "Role Done"
+
+Save: Ctrl + O → Enter → Ctrl + X.
+
+Go back one directory:
+cd ..
+nano inventory
+
+Enter:
+[web]
+localhost ansible_connection=local
+Save and exit.
+
+nano main.yml
+
+Enter:
+
+---
+- name: Run Ansible Role
+  hosts: web
+  roles:
+    - prerequisites
+Save and exit.
+
+ansible-playbook -i inventory --syntax-check main.yml
+Expected:
+playbook: main.yml
+ansible-playbook -i inventory main.yml
+Expected output:
+TASK [prerequisites : Print prerequisites message]
+ok: [localhost] => {
+    "msg": "Role Done"
+}
+Result: The Ansible role was created using ansible-galaxy init and executed successfully through tasks/main.yml.
